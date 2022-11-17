@@ -1,3 +1,3 @@
 # hotcorners
 
-tbd
+A minimalist approach to hotcorners for windows.

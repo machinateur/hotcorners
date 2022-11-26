@@ -84,7 +84,9 @@ public final class Application extends MouseMotionSubscriber {
 
                 this.executeKeyStrokeSequence(keyStrokeEntry.getValue());
             } else {
-                System.out.printf("Event: Intersection of %s in %s" + Main.NEW_LINE, point, "(unknown)");
+                if (Main.isVerboseMode()) {
+                    System.out.printf("Event: Intersection of %s in %s" + Main.NEW_LINE, point, "(unknown)");
+                }
             }
         }
     }
@@ -95,7 +97,9 @@ public final class Application extends MouseMotionSubscriber {
                 continue;
             }
 
-            System.out.printf("Execute: Key-Press: %d..." + Main.NEW_LINE, key);
+            if (Main.isVerboseMode()) {
+                System.out.printf("Execute: Key-Press: %d..." + Main.NEW_LINE, key);
+            }
 
             this.robot.keyPress(key);
         }
@@ -104,7 +108,9 @@ public final class Application extends MouseMotionSubscriber {
                 continue;
             }
 
-            System.out.printf("Execute: Key-Release: %d..." + Main.NEW_LINE, key);
+            if (Main.isVerboseMode()) {
+                System.out.printf("Execute: Key-Release: %d..." + Main.NEW_LINE, key);
+            }
 
             this.robot.keyRelease(key);
         }

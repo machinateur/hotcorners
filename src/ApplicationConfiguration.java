@@ -29,9 +29,8 @@ import java.awt.event.KeyEvent;
 import java.io.*;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
+import java.util.List;
 
 public class ApplicationConfiguration extends Properties {
 
@@ -58,10 +57,27 @@ public class ApplicationConfiguration extends Properties {
         this.put("delay", "10");
 
         // The default configuration for a standard HD screen (1920x1080).
-        this.put("@0,0,2,2", "vk_control + vk_alt + vk_tab");
-        this.put("@1918,0,1920,0", "vk_windows + vk_a");
-        this.put("@0,1078,2,1080", "vk_windows + vk_tab");
-        this.put("@1918,1078,1920,1080", "vk_windows + vk_d");
+        // - Top left corner.
+        this.put(0, 0, 2, 2, new int[]{
+                KeyEvent.VK_CONTROL,
+                KeyEvent.VK_ALT,
+                KeyEvent.VK_TAB,
+        });
+        // - Top right corner.
+        this.put(1918, 0, 1920, 2, new int[]{
+                KeyEvent.VK_WINDOWS,
+                KeyEvent.VK_A,
+        });
+        // - Bottom left corner.
+        this.put(0, 1078, 2, 1080, new int[]{
+                KeyEvent.VK_WINDOWS,
+                KeyEvent.VK_TAB,
+        });
+        // - Top right corner.
+        this.put(1918, 1078, 1920, 1080, new int[]{
+                KeyEvent.VK_WINDOWS,
+                KeyEvent.VK_D,
+        });
     }
 
     public void loadConfiguration() {
@@ -84,6 +100,69 @@ public class ApplicationConfiguration extends Properties {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public void put(int x0, int y0, int x1, int y1, String[] commandList) {
+        if (commandList.length > ApplicationConfiguration.COMMAND_STACK_SIZE) {
+            System.out.printf("Configuration: Command-Stack: Invalid!" + Main.NEW_LINE);
+
+            throw new IndexOutOfBoundsException(commandList.length);
+        }
+
+        List<String> commandListSafe = new ArrayList<String>(ApplicationConfiguration.COMMAND_STACK_SIZE);
+
+        for (String command : commandList) {
+            if (null != command) {
+                commandListSafe.add(command);
+            }
+        }
+
+        String key = String.format("@%d,%d,%d,%d", x0, y0, x1, y1);
+        String value = String.join(" + ", commandListSafe);
+
+        this.put(key, value);
+    }
+
+    public void put(Point p0, Point p1, String[] commandList) {
+        this.put(p0.x, p0.y, p1.x, p1.y, commandList);
+    }
+
+    public void put(int x0, int y0, int x1, int y1, int[] commandStack) {
+        if (commandStack.length > ApplicationConfiguration.COMMAND_STACK_SIZE) {
+            System.out.printf("Configuration: Command-Stack: Invalid!" + Main.NEW_LINE);
+
+            throw new IndexOutOfBoundsException(commandStack.length);
+        }
+
+        String[] commandList = new String[ApplicationConfiguration.COMMAND_STACK_SIZE];
+
+        for (int i = 0; i < commandStack.length; i++) {
+            try {
+                commandList[i] = this.getKeyFieldName(commandStack[i]);
+            } catch (ReflectiveOperationException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        this.put(x0, y0, x1, y1, commandList);
+    }
+
+    public void put(Point p0, Point p1, int[] commandStack) {
+        this.put(p0.x, p0.y, p1.x, p1.y, commandStack);
+    }
+
+    protected String getKeyFieldName(int commandValue) throws IllegalAccessException, NoSuchFieldException {
+        for (Field field : KeyEvent.class.getDeclaredFields()) {
+            if (Modifier.isStatic(field.getModifiers())
+                    && field.getType() == int.class
+                    && field.getName().startsWith("VK_")
+                    && commandValue == field.getInt(null)) {
+                return field.getName();
+            }
+        }
+
+        return KeyEvent.class.getDeclaredField("VK_UNDEFINED")
+                .getName();
     }
 
     /**
@@ -161,7 +240,7 @@ public class ApplicationConfiguration extends Properties {
         // Cut the coordinates into pieces, i.e. values, at any of the split chars (regex).
         String[] commandList = value.split(ApplicationConfiguration.CONFIGURATION_SPLIT_REGEX);
 
-        if (commandList.length > commandStack.length) {
+        if (commandList.length > ApplicationConfiguration.COMMAND_STACK_SIZE) {
             System.out.printf("Configuration: Command-Stack: Invalid!" + Main.NEW_LINE);
 
             throw new IndexOutOfBoundsException(commandList.length);
@@ -175,7 +254,9 @@ public class ApplicationConfiguration extends Properties {
             // Try to find the sta-tic field corresponding to the given command.
             Field field = KeyEvent.class.getDeclaredField(command);
 
-            if (Modifier.isStatic(field.getModifiers()) && field.getType() == int.class) {
+            if (Modifier.isStatic(field.getModifiers())
+                    && field.getType() == int.class
+                    && field.getName().startsWith("VK_")) {
                 int commandValue = commandStack[i] = field.getInt(null);
 
                 System.out.printf("Configuration: Command %d: '%s' = %d" + Main.NEW_LINE, i, command, commandValue);

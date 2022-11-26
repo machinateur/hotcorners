@@ -26,11 +26,16 @@ package dev.machinateur.hotcorners;
 
 import java.time.Year;
 
-public class Main {
+final public class Main {
 
     public static final String VERSION = "0.1.0";
 
     public static final String NEW_LINE = "%n";
+
+    private static boolean VERBOSE_MODE = false;
+
+    private Main() {
+    }
 
     public static void main(String[] args) {
         Year year = Year.now();
@@ -39,7 +44,58 @@ public class Main {
         System.out.printf("Copyright (c) 2021-%d machinateur" + Main.NEW_LINE, year.getValue());
         System.out.println();
 
-        Application application = new Application();
+        ApplicationConfiguration configuration = Main.getApplicationConfiguration(args);
+
+        Application application = new Application(configuration);
         application.start();
+    }
+
+    private static ApplicationConfiguration getApplicationConfiguration(String[] args) {
+        ApplicationConfiguration configuration = new ApplicationConfiguration();
+
+        if (args.length > 0) {
+            boolean exit = false;
+            int exitCode = 0;
+
+            for (int i = 0; i < args.length; i++) {
+                switch (args[i]) {
+                    case "--run-configuration-calculation" -> {
+                        System.out.println("Argument: Run configuration calculation based on primary screen size...");
+
+                        configuration = new ApplicationConfigurationCalculation();
+                    }
+                    case "--store-configuration" -> {
+                        System.out.println("Argument: Store configuration to file...");
+
+                        configuration.storeConfiguration();
+                    }
+                    case "--exit" -> {
+                        System.out.println("Argument: Exit afterwards...");
+
+                        exit = true;
+                    }
+                    case "--verbose" -> {
+                        System.out.println("Argument: Activate verbose mode...");
+
+                        Main.VERBOSE_MODE = true;
+                    }
+                    default -> {
+                        System.out.printf("Argument: Unknown: '%s'!" + Main.NEW_LINE, args[i]);
+                    }
+                }
+            }
+
+            if (exit) {
+                System.exit(exitCode);
+            }
+
+            System.out.println();
+        }
+
+        return configuration;
+    }
+
+    public static boolean isVerboseMode() {
+        return Main.VERBOSE_MODE;
     }
 }

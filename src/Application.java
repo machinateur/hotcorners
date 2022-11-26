@@ -144,18 +144,18 @@ public final class Application extends MouseMotionSubscriber {
 
                 // Skip any key that does not start with the marker char (i.e. "@").
                 if (key.charAt(0) != Application.CONFIGURATION_MARKER) {
-                    System.out.printf("Configuration: Skip key '%s'...%n", key);
+                    System.out.printf("Configuration: Skip key '%s'..." + Main.NEW_LINE, key);
 
                     continue;
                 } else {
-                    System.out.printf("Configuration: Parse key '%s'...%n", key);
+                    System.out.printf("Configuration: Parse key '%s'..." + Main.NEW_LINE, key);
 
                     key = key.substring(1);
                 }
 
                 String value = (String) entry.getValue();
 
-                System.out.printf("Configuration: Parse value '%s'...%n", value);
+                System.out.printf("Configuration: Parse value '%s'..." + Main.NEW_LINE, value);
 
                 keyStrokeMap.put(this.parseConfigurationKey(key), this.parseConfigurationValue(value));
 
@@ -174,7 +174,7 @@ public final class Application extends MouseMotionSubscriber {
 
         // Make sure the size matches up.
         if (coordinatePair.length != Application.COORDINATE_PAIR_SIZE) {
-            System.out.printf("Configuration: Intersection-Area: Invalid!%n");
+            System.out.printf("Configuration: Intersection-Area: Invalid!" + Main.NEW_LINE);
 
             throw new IndexOutOfBoundsException(coordinatePair.length);
         }
@@ -192,7 +192,7 @@ public final class Application extends MouseMotionSubscriber {
         final Rectangle rectangle = new Rectangle((int) p0.getX(), (int) p0.getY(), 0, 0);
         rectangle.add(p1);
 
-        System.out.printf("Configuration: Intersection-Area: %s.%n", rectangle);
+        System.out.printf("Configuration: Intersection-Area: %s." + Main.NEW_LINE, rectangle);
 
         return rectangle;
     }
@@ -204,7 +204,7 @@ public final class Application extends MouseMotionSubscriber {
         String[] commandList = value.split(Application.CONFIGURATION_SPLIT_REGEX);
 
         if (commandList.length > commandStack.length) {
-            System.out.printf("Configuration: Command-Stack: Invalid!%n");
+            System.out.printf("Configuration: Command-Stack: Invalid!" + Main.NEW_LINE);
 
             throw new IndexOutOfBoundsException(commandList.length);
         }
@@ -220,9 +220,9 @@ public final class Application extends MouseMotionSubscriber {
             if (Modifier.isStatic(field.getModifiers()) && field.getType() == int.class) {
                 int commandValue = commandStack[i] = field.getInt(null);
 
-                System.out.printf("Configuration: Command %d: '%s' = %d%n", i, command, commandValue);
+                System.out.printf("Configuration: Command %d: '%s' = %d" + Main.NEW_LINE, i, command, commandValue);
             } else {
-                System.out.printf("Configuration: Command %d: '%s' = %s%n", i, command, "(unknown)");
+                System.out.printf("Configuration: Command %d: '%s' = %s" + Main.NEW_LINE, i, command, "(unknown)");
             }
         }
 
@@ -237,11 +237,11 @@ public final class Application extends MouseMotionSubscriber {
             final Rectangle area = keyStrokeEntry.getKey();
 
             if (area.contains(point)) {
-                System.out.printf("Event: Intersection of %s in %s%n", point, area);
+                System.out.printf("Event: Intersection of %s in %s" + Main.NEW_LINE, point, area);
 
                 this.executeKeyStrokeSequence(keyStrokeEntry.getValue());
             } else {
-                System.out.printf("Event: Intersection of %s in %s%n", point, "(unknown)");
+                System.out.printf("Event: Intersection of %s in %s" + Main.NEW_LINE, point, "(unknown)");
             }
         }
     }
@@ -252,7 +252,7 @@ public final class Application extends MouseMotionSubscriber {
                 continue;
             }
 
-            System.out.printf("Execute: Key-Press: %d...%n", key);
+            System.out.printf("Execute: Key-Press: %d..." + Main.NEW_LINE, key);
 
             this.robot.keyPress(key);
         }
@@ -261,7 +261,7 @@ public final class Application extends MouseMotionSubscriber {
                 continue;
             }
 
-            System.out.printf("Execute: Key-Release: %d...%n", key);
+            System.out.printf("Execute: Key-Release: %d..." + Main.NEW_LINE, key);
 
             this.robot.keyRelease(key);
         }

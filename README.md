@@ -58,20 +58,44 @@ Any line starting with the `@` symbol, will be interpreted as area configuration
 is `@x0,y0,x1,y1`. Spaces in keys have to be escaped according to the `properties` format. The area is created by
 using `x0` and `y0` to create a point `p0` on the screen coordinate system, which is then extended to a point `p1`,
 which is defined by `x1` and `y1`. The key is followed by an `=` sign. The value is a `+`-separated list
-of [VK_-Constants](https://docs.oracle.com/javase/7/docs/api/java/awt/event/KeyEvent.html#field_summary). Currently,
-there is limit of `5` for the list of values.
+of [VK_-Constants](https://docs.oracle.com/javase/7/docs/api/java/awt/event/KeyEvent.html#field_summary) by name.
+Currently, there is limit of `5` for the list of values, which seemed reasonable to me.
 
-## Screen resolution matters
+There is a special `delay` configuration key, which sets the amount of milliseconds that's used for global mouse
+detection. It's set to a sensible default of `10`. In case you encounter a performance impact, play around with this
+value.
+
+Here is an example of the initial configuration:
+
+```properties
+#See https://en.wikipedia.org/wiki/.properties#Format and  for more information on the format.
+#Sat Nov 26 19:35:19 CET 2022
+@0,0,2,2=VK_CONTROL + VK_ALT + VK_TAB
+@0,1078,2,1080=VK_WINDOWS + VK_TAB
+@1918,0,1920,2=VK_WINDOWS + VK_A
+@1918,1078,1920,1080=VK_WINDOWS + VK_D
+delay=10
+
+```
+
+### Screen resolution matters
 
 The screen resolution matters, as it reduces the virtual screen size. So with a zoom factor of `125%`, some areas of the
 screen you've configured for keystrokes might not be accessible to the mouse! Just keep that in mind.
 
-## Executing keystrokes
+### Executing keystrokes
 
 Any one of the [VK_-Constants](https://docs.oracle.com/javase/7/docs/api/java/awt/event/KeyEvent.html#field_summary)
 that is supported by your keyboard can be added to the list. It's up to you to decide which ones make sense.
 
 The defaults are just the ones I use.
+
+### A word of warning
+
+Just a word of warning: **A faulty configuration may result in significant usability issues.** For example if an action
+area is defined over the whole screen area, tabbing through the windows, that would most certainly be annoying. That
+was the reason I introduced the automatic calculation functionality in the first place (yes, I miscalculated my areas
+during testing, let's not talk about it).
 
 ## License
 

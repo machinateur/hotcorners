@@ -69,10 +69,15 @@ Here is an example of the initial configuration:
 ```properties
 #See https://en.wikipedia.org/wiki/.properties#Format and https://github.com/machinateur/hotcorners#configuration for more information on the format.
 #Sat Nov 26 19:35:19 CET 2022
+#Corner top left
 @0,0,2,2=VK_CONTROL + VK_ALT + VK_TAB
+#Corner bottom left
 @0,1078,2,1080=VK_WINDOWS + VK_TAB
+#Corner top left
 @1918,0,1920,2=VK_WINDOWS + VK_A
+#Corner bottom right
 @1918,1078,1920,1080=VK_WINDOWS + VK_D
+#Delay for mouse movement detection in milliseconds
 delay=10
 
 ```

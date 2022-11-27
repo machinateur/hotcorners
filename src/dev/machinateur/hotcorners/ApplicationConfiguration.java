@@ -38,8 +38,7 @@ public class ApplicationConfiguration extends Properties {
             = "./hotcorners.properties";
 
     protected static final String CONFIGURATION_FILE_COMMENTS
-            // TODO: Link to the repository README.md section.
-            = "See https://en.wikipedia.org/wiki/.properties#Format and  for more information on the format.";
+            = "See https://en.wikipedia.org/wiki/.properties#Format and https://github.com/machinateur/hotcorners#configuration for more information on the format.";
 
     protected static final String CONFIGURATION_SPLIT_REGEX
             = "[,;+]";

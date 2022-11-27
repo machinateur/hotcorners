@@ -68,7 +68,7 @@ value.
 Here is an example of the initial configuration:
 
 ```properties
-#See https://en.wikipedia.org/wiki/.properties#Format and  for more information on the format.
+#See https://en.wikipedia.org/wiki/.properties#Format and https://github.com/machinateur/hotcorners#configuration for more information on the format.
 #Sat Nov 26 19:35:19 CET 2022
 @0,0,2,2=VK_CONTROL + VK_ALT + VK_TAB
 @0,1078,2,1080=VK_WINDOWS + VK_TAB

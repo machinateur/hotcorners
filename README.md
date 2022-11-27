@@ -10,9 +10,8 @@ Make sure to add the location of the java runtime to the `PATH` environment vari
 
 ## Installation
 
-Currently, the only way to install the application is to download the `.jar` file. It is attached to the latest release.
-
-Note that the while a release comes as `.zip` file of all sources, most of its content is not required.
+Currently, the only way to install the application is to download the `.jar` file. It contained in the `.zip` file,
+attached to the [latest release](https://github.com/machinateur/hotcorners/releases/latest).
 
 ## Usage
 

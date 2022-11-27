@@ -47,19 +47,19 @@ the correct java process from within the task manager.
 ## Configuration
 
 Upon first running the application, a new configuration file will be created. That configuration assumes a standard HD
-screen (1920x1080).
+screen (`1920x1080`).
 
 To generate a configuration that is based on your individual primary screen size, run the `hotcorners-configuration.cmd`
 file.
 
 The configuration is written to the `hotcorners.properties` file, which can be changed to meet your needs.
 
-Any line starting with the `@` symbol, will be interpreted as area configuration (or at least tried to be). The key
-format is `@x0,y0,x1,y1`. Spaces in keys have to be escaped according to the `properties` format. The key is followed by
-an `=` sign. The value is a `+`-separated list
-of [VK_-Constants](https://docs.oracle.com/javase/7/docs/api/java/awt/event/KeyEvent.html#field_summary).
-
-Currently, there is limit of `5` for keys.
+Any line starting with the `@` symbol, will be interpreted as area configuration (or at least tried to). The key format
+is `@x0,y0,x1,y1`. Spaces in keys have to be escaped according to the `properties` format. The area is created by
+using `x0` and `y0` to create a point `p0` on the screen coordinate system, which is then extended to a point `p1`,
+which is defined by `x1` and `y1`. The key is followed by an `=` sign. The value is a `+`-separated list
+of [VK_-Constants](https://docs.oracle.com/javase/7/docs/api/java/awt/event/KeyEvent.html#field_summary). Currently,
+there is limit of `5` for the list of values.
 
 ## Screen resolution matters
 
